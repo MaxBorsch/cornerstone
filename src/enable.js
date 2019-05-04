@@ -39,7 +39,7 @@ function hasImageOrLayers (enabledElement) {
  * @return {void}
  * @memberof Enable
  */
-export default function (element, options) {
+export default function (element, options, elementCanvas) {
   if (element === undefined) {
     throw new Error('enable: parameter element cannot be undefined');
   }
@@ -54,7 +54,7 @@ export default function (element, options) {
     tryEnableWebgl(options);
   }
 
-  const canvas = getCanvas(element);
+  const canvas = elementCanvas || getCanvas(element);
 
   const enabledElement = {
     element,
