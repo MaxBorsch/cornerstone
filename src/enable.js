@@ -5,7 +5,7 @@ import requestAnimationFrame from './internal/requestAnimationFrame.js';
 import tryEnableWebgl from './internal/tryEnableWebgl.js';
 import triggerEvent from './triggerEvent.js';
 import generateUUID from './generateUUID.js';
-import EVENTS, { events } from './events.js';
+import EVENTS, { events, EventTarget } from './events.js';
 import getCanvas from './internal/getCanvas.js';
 
 /**
@@ -42,6 +42,10 @@ function hasImageOrLayers (enabledElement) {
 export default function (element, options, elementCanvas) {
   if (element === undefined) {
     throw new Error('enable: parameter element cannot be undefined');
+  }
+
+  if (typeof element.dispatchEvent !== 'function') {
+    element.eventTarget = new EventTarget();
   }
 
   // If this enabled element has the option set for WebGL, we should

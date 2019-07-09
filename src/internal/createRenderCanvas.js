@@ -5,6 +5,6 @@
  * @return {HTMLElement} canvas A Canvas DOM element implementation
  */
 export default function createRenderCanvas (options) {
-  return (options.rendering && options.rendering.createRenderCanvas && options.rendering.options.createRenderCanvas()) ||
+  return (options.rendering && options.rendering.createRenderCanvas && options.rendering.createRenderCanvas()) ||
    document.createElement('canvas');
 }

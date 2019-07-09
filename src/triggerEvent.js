@@ -1,3 +1,5 @@
+import { CustomEvent as CustomEventImpl } from './events.js';
+
 /**
  * Trigger a CustomEvent
  *
@@ -7,6 +9,12 @@
  * @returns {Boolean} The return value is false if at least one event listener called preventDefault(). Otherwise it returns true.
  */
 export default function triggerEvent (el, type, detail = null) {
+  const eventTarget = (typeof el.dispatchEvent === 'function' ? el : el.eventTarget);
+
+  if (!eventTarget) {
+    throw new Error('Attempt to call triggerEvent() on an incompatible object');
+  }
+
   let event;
 
   // This check is needed to polyfill CustomEvent on IE11-
@@ -16,9 +24,16 @@ export default function triggerEvent (el, type, detail = null) {
       cancelable: true
     });
   } else {
-    event = document.createEvent('CustomEvent');
+    if (typeof document === 'undefined') {
+      event = new CustomEventImpl(type, {
+        detail,
+        cancelable: true
+      });
+    } else {
+      event = document.createEvent('CustomEvent');
+    }
     event.initCustomEvent(type, true, true, detail);
   }
 
-  return el.dispatchEvent(event);
+  return eventTarget.dispatchEvent(event);
 }
